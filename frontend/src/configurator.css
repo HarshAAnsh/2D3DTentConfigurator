@@ -1,0 +1,1006 @@
+/* ============================================================
+   GLOBAL
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background: #f4f6f8;
+  color: #111827;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+
+/* ============================================================
+   APP
+   ============================================================ */
+
+.app {
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.app-header {
+  min-height: 74px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 14px 22px;
+
+  background: #111827;
+  color: white;
+}
+
+.app-header h1 {
+  margin: 0;
+
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 750;
+}
+
+.brand-eyebrow {
+  margin: 0 0 4px;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+
+  color: #93c5fd;
+}
+
+.brand-subtitle {
+  margin: 4px 0 0;
+
+  font-size: 12px;
+
+  color: #cbd5e1;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.header-price span {
+  font-size: 20px;
+  font-weight: 750;
+}
+
+.header-price small {
+  color: #94a3b8;
+  font-size: 10px;
+}
+
+
+/* ============================================================
+   MAIN LAYOUT
+   ============================================================ */
+
+.main-layout {
+  width: 100%;
+  max-width: 1500px;
+
+  margin: 0 auto;
+
+  padding: 16px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    380px;
+
+  gap: 16px;
+
+  align-items: start;
+}
+
+
+/* ============================================================
+   WORKSPACE
+   ============================================================ */
+
+.workspace {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+}
+
+.workspace-card {
+  min-width: 0;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 12px;
+
+  padding: 14px;
+
+  box-shadow:
+    0 4px 16px rgba(15, 23, 42, 0.05);
+}
+
+
+/* ============================================================
+   PANEL TITLE
+   ============================================================ */
+
+.panel-title {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 10px;
+}
+
+.eyebrow {
+  margin: 0 0 3px;
+
+  font-size: 10px;
+
+  font-weight: 750;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+
+  color: #64748b;
+}
+
+.panel-title h2 {
+  margin: 0;
+
+  font-size: 16px;
+
+  line-height: 1.2;
+
+  color: #0f172a;
+}
+
+.helper-text {
+  flex-shrink: 0;
+
+  font-size: 11px;
+
+  color: #64748b;
+}
+
+
+/* ============================================================
+   THREE.JS VIEWER
+   ============================================================ */
+
+.viewer {
+  width: 100%;
+
+  height: 560px;
+
+  overflow: hidden;
+
+  position: relative;
+
+  border-radius: 10px;
+
+  background: #e5e7eb;
+}
+
+.viewer canvas {
+  display: block;
+
+  width: 100% !important;
+  height: 100% !important;
+}
+
+
+/* ============================================================
+   2D EDITOR
+   ============================================================ */
+
+.editor-canvas {
+  display: block;
+
+  width: 100%;
+
+  min-height: 480px;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 10px;
+
+  cursor: crosshair;
+
+  touch-action: none;
+
+  background: #ffffff;
+}
+
+
+/* ============================================================
+   CUSTOMIZE SIDEBAR
+   ============================================================ */
+
+.controls {
+  width: 100%;
+
+  min-width: 0;
+
+  padding: 20px;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.08);
+
+  height: fit-content;
+
+  position: sticky;
+
+  top: 16px;
+}
+
+
+/* ============================================================
+   CONTROLS HEADER
+   ============================================================ */
+
+.controls-header {
+  margin-bottom: 20px;
+}
+
+.controls-header h2 {
+  margin: 0;
+
+  font-size: 22px;
+
+  line-height: 1.2;
+
+  font-weight: 750;
+
+  color: #0f172a;
+}
+
+
+/* ============================================================
+   CONTROL GROUP
+   ============================================================ */
+
+.control-group {
+  width: 100%;
+
+  margin-bottom: 18px;
+}
+
+.control-label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 13px;
+
+  line-height: 1.2;
+
+  font-weight: 650;
+
+  color: #334155;
+}
+
+
+/* ============================================================
+   PRODUCT SIZE
+   ============================================================ */
+
+.control-select {
+  display: block;
+
+  width: 100%;
+
+  height: 42px;
+
+  padding: 0 12px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #0f172a;
+
+  outline: none;
+
+  cursor: pointer;
+}
+
+.control-select:focus {
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+
+/* ============================================================
+   COLORS
+   ============================================================ */
+
+.color-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+.color-control {
+  min-width: 0;
+}
+
+.color-control label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  color: #475569;
+}
+
+.color-input-wrapper {
+  min-width: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 6px 8px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 8px;
+
+  background: #f8fafc;
+}
+
+.color-input-wrapper input[type="color"] {
+  flex: 0 0 36px;
+
+  display: block;
+
+  width: 36px;
+
+  height: 30px;
+
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+.color-input-wrapper span {
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  font-family: monospace;
+
+  font-size: 10px;
+
+  color: #64748b;
+}
+
+
+/* ============================================================
+   PANEL TABS
+   ============================================================ */
+
+.panel-tabs {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 6px;
+}
+
+.panel-tab {
+  min-width: 0;
+
+  height: 38px;
+
+  padding: 0 6px;
+
+  border: 1px solid #dbe2ea;
+
+  border-radius: 8px;
+
+  background: #f1f5f9;
+
+  color: #334155;
+
+  font-size: 12px;
+
+  font-weight: 650;
+
+  text-transform: capitalize;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.panel-tab:hover {
+  background: #e2e8f0;
+}
+
+.panel-tab.active {
+  background: #2563eb;
+
+  border-color: #2563eb;
+
+  color: #ffffff;
+}
+
+
+/* ============================================================
+   ADD TEXT / LOGO
+   ============================================================ */
+
+.action-row {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 8px;
+}
+
+.primary-action {
+  width: 100%;
+
+  min-height: 42px;
+
+  padding: 0 10px;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background: #2563eb;
+
+  color: #ffffff;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  font-size: 13px;
+
+  font-weight: 650;
+
+  transition:
+    background 0.15s ease,
+    transform 0.1s ease;
+}
+
+.primary-action:hover {
+  background: #1d4ed8;
+}
+
+.primary-action:active {
+  transform: translateY(1px);
+}
+
+
+/* ============================================================
+   SELECTED ELEMENT
+   ============================================================ */
+
+.selected-element {
+  width: 100%;
+
+  margin-bottom: 18px;
+
+  padding: 16px;
+
+  border: 1px solid #dbeafe;
+
+  border-radius: 10px;
+
+  background: #f8fbff;
+}
+
+.selected-title {
+  margin-bottom: 14px;
+
+  padding-bottom: 10px;
+
+  border-bottom: 1px solid #e2e8f0;
+
+  font-size: 13px;
+
+  color: #475569;
+}
+
+.selected-title strong {
+  color: #2563eb;
+
+  text-transform: capitalize;
+}
+
+
+/* ============================================================
+   TEXT INPUT
+   ============================================================ */
+
+.control-input {
+  display: block;
+
+  width: 100%;
+
+  height: 40px;
+
+  padding: 0 10px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #0f172a;
+
+  outline: none;
+}
+
+.control-input:focus {
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+.small-color-input {
+  width: 48px !important;
+
+  height: 36px !important;
+
+  padding: 0;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+}
+
+
+/* ============================================================
+   SLIDERS
+   ============================================================ */
+
+.slider-group {
+  margin-top: 15px;
+}
+
+.slider-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 7px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  color: #475569;
+}
+
+.slider-header span:last-child {
+  color: #2563eb;
+
+  font-family: monospace;
+}
+
+.slider-group input[type="range"] {
+  display: block;
+
+  width: 100%;
+
+  height: 5px;
+
+  padding: 0;
+
+  accent-color: #2563eb;
+
+  cursor: pointer;
+}
+
+
+/* ============================================================
+   REMOVE
+   ============================================================ */
+
+.danger-action {
+  width: 100%;
+
+  min-height: 40px;
+
+  margin-top: 16px;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background: #fee2e2;
+
+  color: #b91c1c;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  font-size: 13px;
+
+  font-weight: 650;
+}
+
+.danger-action:hover {
+  background: #fecaca;
+}
+
+
+/* ============================================================
+   RESET
+   ============================================================ */
+
+.reset-action {
+  width: 100%;
+
+  min-height: 42px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 8px;
+
+  background: #f1f5f9;
+
+  color: #334155;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  font-size: 13px;
+
+  font-weight: 650;
+}
+
+.reset-action:hover {
+  background: #e2e8f0;
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.app-footer {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 14px 22px;
+
+  background: #ffffff;
+
+  border-top: 1px solid #e2e8f0;
+}
+
+.price-items {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+  font-size: 12px;
+
+  color: #64748b;
+}
+
+.price-items strong {
+  color: #111827;
+}
+
+.total-price {
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.footer-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+button {
+  border: 0;
+
+  border-radius: 8px;
+
+  padding: 9px 12px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+}
+
+.app-header button,
+.app-footer button {
+  background: #2563eb;
+
+  color: #ffffff;
+
+  font-weight: 650;
+}
+
+.secondary {
+  background: #e5e7eb !important;
+
+  color: #111827 !important;
+}
+
+
+/* ============================================================
+   RESPONSIVE - TABLET
+   ============================================================ */
+
+@media (max-width: 1100px) {
+  .main-layout {
+    grid-template-columns:
+      minmax(0, 1fr)
+      340px;
+  }
+
+  .controls {
+    padding: 16px;
+  }
+}
+
+
+/* ============================================================
+   RESPONSIVE - MOBILE
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+
+    padding: 12px;
+  }
+
+  .controls {
+    position: static;
+
+    width: 100%;
+  }
+
+  .viewer {
+    height: 460px;
+  }
+}
+
+
+@media (max-width: 650px) {
+  .app-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    padding: 14px;
+  }
+
+  .header-actions {
+    width: 100%;
+
+    justify-content: space-between;
+  }
+
+  .main-layout {
+    padding: 8px;
+
+    gap: 10px;
+  }
+
+  .workspace-card {
+    padding: 10px;
+  }
+
+  .panel-title {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 5px;
+  }
+
+  .helper-text {
+    display: none;
+  }
+
+  .controls {
+    padding: 14px;
+
+    border-radius: 12px;
+  }
+
+  .color-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-tabs {
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+
+  .action-row {
+    grid-template-columns: 1fr;
+  }
+
+  .viewer {
+    height: 380px;
+  }
+
+  .editor-canvas {
+    min-height: 350px;
+  }
+
+  .app-footer {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .price-items {
+    flex-wrap: wrap;
+
+    gap: 8px 14px;
+  }
+
+  .footer-actions {
+    width: 100%;
+  }
+
+  .footer-actions button {
+    flex: 1;
+  }
+}
+
+
+/* ============================================================
+   VERY SMALL SCREENS
+   ============================================================ */
+
+@media (max-width: 400px) {
+  .panel-tabs {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .color-grid {
+    grid-template-columns: 1fr;
+  }
+}
