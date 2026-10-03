@@ -1,50 +1,27 @@
 import * as THREE from "three";
 
-import type {
-  DesignElement,
-  SectionDesign,
-} from "../types/configurator";
+import type { DesignElement, SectionDesign } from "../types/configurator";
 
-const imageCache =
-  new Map<
-    string,
-    Promise<HTMLImageElement>
-  >();
+const imageCache = new Map<string, Promise<HTMLImageElement>>();
 
-export function loadImage(
-  source: string,
-): Promise<HTMLImageElement> {
-  const cached =
-    imageCache.get(source);
+export function loadImage(source: string): Promise<HTMLImageElement> {
+  const cached = imageCache.get(source);
 
   if (cached) {
     return cached;
   }
 
-  const promise =
-    new Promise<HTMLImageElement>(
-      (resolve, reject) => {
-        const image =
-          new Image();
+  const promise = new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image();
 
-        image.onload = () =>
-          resolve(image);
+    image.onload = () => resolve(image);
 
-        image.onerror = () =>
-          reject(
-            new Error(
-              "Unable to load image.",
-            ),
-          );
+    image.onerror = () => reject(new Error("Unable to load image."));
 
-        image.src = source;
-      },
-    );
+    image.src = source;
+  });
 
-  imageCache.set(
-    source,
-    promise,
-  );
+  imageCache.set(source, promise);
 
   return promise;
 }
@@ -55,65 +32,33 @@ async function drawElement(
 ) {
   ctx.save();
 
-  const x =
-    (element.x / 100) * 1024;
+  const x = (element.x / 100) * 1024;
 
-  const y =
-    (element.y / 100) * 1024;
+  const y = (element.y / 100) * 1024;
 
   ctx.translate(x, y);
 
-  ctx.rotate(
-    (element.rotation *
-      Math.PI) /
-      180,
-  );
+  ctx.rotate((element.rotation * Math.PI) / 180);
 
-  ctx.scale(
-    element.scale,
-    element.scale,
-  );
+  ctx.scale(element.scale, element.scale);
 
-  ctx.globalAlpha =
-    Math.max(
-      0,
-      Math.min(
-        1,
-        element.opacity,
-      ),
-    );
+  ctx.globalAlpha = Math.max(0, Math.min(1, element.opacity));
 
-  if (
-    element.type === "text"
-  ) {
-    ctx.fillStyle =
-      element.color;
+  if (element.type === "text") {
+    ctx.fillStyle = element.color;
 
-    ctx.font =
-      `700 ${element.fontSize}px ${element.fontFamily}`;
+    ctx.font = `700 ${element.fontSize}px ${element.fontFamily}`;
 
-    ctx.textAlign =
-      "center";
+    ctx.textAlign = "center";
 
-    ctx.textBaseline =
-      "middle";
+    ctx.textBaseline = "middle";
 
-    ctx.fillText(
-      element.text || "",
-      0,
-      0,
-    );
+    ctx.fillText(element.text || "", 0, 0);
   }
 
-  if (
-    element.type === "image" &&
-    element.image
-  ) {
+  if (element.type === "image" && element.image) {
     try {
-      const image =
-        await loadImage(
-          element.image,
-        );
+      const image = await loadImage(element.image);
 
       ctx.drawImage(
         image,
@@ -127,10 +72,7 @@ async function drawElement(
         element.height,
       );
     } catch (error) {
-      console.error(
-        "Unable to render uploaded image:",
-        error,
-      );
+      console.error("Unable to render uploaded image:", error);
     }
   }
 
@@ -140,46 +82,30 @@ async function drawElement(
 export async function createSectionTexture(
   section: SectionDesign,
 ): Promise<THREE.CanvasTexture> {
-  const canvas =
-    document.createElement(
-      "canvas",
-    );
+  const canvas = document.createElement("canvas");
 
   canvas.width = 1024;
 
   canvas.height = 1024;
 
-  const ctx =
-    canvas.getContext("2d");
+  const ctx = canvas.getContext("2d");
 
   if (!ctx) {
-    throw new Error(
-      "Canvas 2D context is unavailable.",
-    );
+    throw new Error("Canvas 2D context is unavailable.");
   }
 
   /*
    * Panel background.
    */
-  ctx.fillStyle =
-    section.color;
+  ctx.fillStyle = section.color;
 
-  ctx.fillRect(
-    0,
-    0,
-    canvas.width,
-    canvas.height,
-  );
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   /*
    * Draw all elements.
    */
-  for (const element of
-    section.elements) {
-    await drawElement(
-      ctx,
-      element,
-    );
+  for (const element of section.elements) {
+    await drawElement(ctx, element);
   }
 
   /*
@@ -187,24 +113,15 @@ export async function createSectionTexture(
    */
   ctx.save();
 
-  ctx.strokeStyle =
-    "rgba(0,0,0,0.08)";
+  ctx.strokeStyle = "rgba(0,0,0,0.08)";
 
   ctx.lineWidth = 8;
 
-  ctx.strokeRect(
-    4,
-    4,
-    1016,
-    1016,
-  );
+  ctx.strokeRect(4, 4, 1016, 1016);
 
   ctx.restore();
 
-  const texture =
-    new THREE.CanvasTexture(
-      canvas,
-    );
+  const texture = new THREE.CanvasTexture(canvas);
 
   /*
    * GLTF UV coordinates use the
@@ -212,25 +129,19 @@ export async function createSectionTexture(
    */
   texture.flipY = false;
 
-  texture.colorSpace =
-    THREE.SRGBColorSpace;
+  texture.colorSpace = THREE.SRGBColorSpace;
 
-  texture.wrapS =
-    THREE.ClampToEdgeWrapping;
+  texture.wrapS = THREE.ClampToEdgeWrapping;
 
-  texture.wrapT =
-    THREE.ClampToEdgeWrapping;
+  texture.wrapT = THREE.ClampToEdgeWrapping;
 
-  texture.minFilter =
-    THREE.LinearMipmapLinearFilter;
+  texture.minFilter = THREE.LinearMipmapLinearFilter;
 
-  texture.magFilter =
-    THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
 
   texture.anisotropy = 4;
 
-  texture.needsUpdate =
-    true;
+  texture.needsUpdate = true;
 
   return texture;
 }

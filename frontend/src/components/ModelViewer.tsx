@@ -82,18 +82,11 @@ function classifyTriangle(
    * Determine which side of the tent the
    * triangle belongs to using its center.
    */
-  if (
-    Math.abs(center.z) >=
-    Math.abs(center.x)
-  ) {
-    return center.z >= 0
-      ? "front"
-      : "back";
+  if (Math.abs(center.z) >= Math.abs(center.x)) {
+    return center.z >= 0 ? "front" : "back";
   }
 
-  return center.x >= 0
-    ? "right"
-    : "left";
+  return center.x >= 0 ? "right" : "left";
 }
 
 /* ==========================================================================
@@ -101,25 +94,18 @@ function classifyTriangle(
    ========================================================================== */
 
 function createSectionGeometry(
-  source: THREE.Mesh<
-    THREE.BufferGeometry,
-    THREE.Material | THREE.Material[]
-  >,
+  source: THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>,
 ): Record<Section, THREE.BufferGeometry> {
-  const sourceGeometry =
-    source.geometry.index
-      ? source.geometry.toNonIndexed()
-      : source.geometry.clone();
+  const sourceGeometry = source.geometry.index
+    ? source.geometry.toNonIndexed()
+    : source.geometry.clone();
 
-  const position =
-    sourceGeometry.getAttribute(
-      "position",
-    ) as THREE.BufferAttribute;
+  const position = sourceGeometry.getAttribute(
+    "position",
+  ) as THREE.BufferAttribute;
 
   if (!position) {
-    throw new Error(
-      `Fabric mesh "${source.name}" has no position attribute.`,
-    );
+    throw new Error(`Fabric mesh "${source.name}" has no position attribute.`);
   }
 
   /* ========================================================================
@@ -199,111 +185,67 @@ function createSectionGeometry(
    This gives us the real wall/roof boundary.
    ======================================================================== */
 
-const triangleCenters: THREE.Vector3[] = [];
+  const triangleCenters: THREE.Vector3[] = [];
 
-const triangleRadii: number[] = [];
+  const triangleRadii: number[] = [];
 
-for (
-  let i = 0;
-  i < position.count;
-  i += 3
-) {
-  a.fromBufferAttribute(
-    position,
-    i,
-  );
+  for (let i = 0; i < position.count; i += 3) {
+    a.fromBufferAttribute(position, i);
 
-  b.fromBufferAttribute(
-    position,
-    i + 1,
-  );
+    b.fromBufferAttribute(position, i + 1);
 
-  c.fromBufferAttribute(
-    position,
-    i + 2,
-  );
+    c.fromBufferAttribute(position, i + 2);
 
-  center
-    .copy(a)
-    .add(b)
-    .add(c)
-    .multiplyScalar(
-      1 / 3,
-    );
+    center
+      .copy(a)
+      .add(b)
+      .add(c)
+      .multiplyScalar(1 / 3);
 
-  const radius =
-    Math.sqrt(
-      center.x * center.x +
-      center.z * center.z,
-    );
+    const radius = Math.sqrt(center.x * center.x + center.z * center.z);
 
-  triangleCenters.push(
-    center.clone(),
-  );
+    triangleCenters.push(center.clone());
 
-  triangleRadii.push(
-    radius,
-  );
-}
-
-/*
- * Find the largest radius of the fabric.
- */
-const maxRadius =
-  Math.max(
-    ...triangleRadii,
-  );
-
-/*
- * Only consider triangles close to the outer perimeter.
- *
- * 90% works well for both the 5x5 and 8x8 GLBs.
- */
-const perimeterThreshold =
-  maxRadius * 0.90;
-
-const perimeterYValues: number[] = [];
-
-for (
-  let i = 0;
-  i < triangleCenters.length;
-  i++
-) {
-  if (
-    triangleRadii[i] >=
-    perimeterThreshold
-  ) {
-    perimeterYValues.push(
-      triangleCenters[i].y,
-    );
+    triangleRadii.push(radius);
   }
-}
 
-/*
- * The highest point on the outer perimeter
- * is the wall/eave boundary.
- */
-let eaveY = 0;
- 
-if (
-  perimeterYValues.length > 0
-) {
-  eaveY =
-    Math.max(
-      ...perimeterYValues,
-    );
-}
+  /*
+   * Find the largest radius of the fabric.
+   */
+  const maxRadius = Math.max(...triangleRadii);
 
-/*
- * Small safety margin.
- *
- * This prevents the exact eave edge from being
- * classified as roof.
- */
-eaveY += 0.01;
+  /*
+   * Only consider triangles close to the outer perimeter.
+   *
+   * 90% works well for both the 5x5 and 8x8 GLBs.
+   */
+  const perimeterThreshold = maxRadius * 0.9;
 
+  const perimeterYValues: number[] = [];
 
+  for (let i = 0; i < triangleCenters.length; i++) {
+    if (triangleRadii[i] >= perimeterThreshold) {
+      perimeterYValues.push(triangleCenters[i].y);
+    }
+  }
 
+  /*
+   * The highest point on the outer perimeter
+   * is the wall/eave boundary.
+   */
+  let eaveY = 0;
+
+  if (perimeterYValues.length > 0) {
+    eaveY = Math.max(...perimeterYValues);
+  }
+
+  /*
+   * Small safety margin.
+   *
+   * This prevents the exact eave edge from being
+   * classified as roof.
+   */
+  eaveY += 0.01;
 
   /* ========================================================================
      SECOND PASS
@@ -311,53 +253,22 @@ eaveY += 0.01;
      Actually classify and collect triangles.
      ======================================================================== */
 
-  for (
-    let i = 0;
-    i < position.count;
-    i += 3
-  ) {
-    a.fromBufferAttribute(
-      position,
-      i,
-    );
+  for (let i = 0; i < position.count; i += 3) {
+    a.fromBufferAttribute(position, i);
 
-    b.fromBufferAttribute(
-      position,
-      i + 1,
-    );
+    b.fromBufferAttribute(position, i + 1);
 
-    c.fromBufferAttribute(
-      position,
-      i + 2,
-    );
+    c.fromBufferAttribute(position, i + 2);
 
-    ab.subVectors(
-      b,
-      a,
-    );
+    ab.subVectors(b, a);
 
-    ac.subVectors(
-      c,
-      a,
-    );
+    ac.subVectors(c, a);
 
-    normal
-      .crossVectors(
-        ab,
-        ac,
-      )
-      .normalize();
+    normal.crossVectors(ab, ac).normalize();
 
-    const section =
-      classifyTriangle(
-        a,
-        b,
-        c,
-        eaveY,
-      );
+    const section = classifyTriangle(a, b, c, eaveY);
 
-    const data =
-      sectionData[section];
+    const data = sectionData[section];
 
     /* ----------------------------------------------------------------------
        Positions
@@ -381,37 +292,22 @@ eaveY += 0.01;
        Normals
        ---------------------------------------------------------------------- */
 
-    for (
-      let j = 0;
-      j < 3;
-      j++
-    ) {
-      data.normals.push(
-        normal.x,
-        normal.y,
-        normal.z,
-      );
+    for (let j = 0; j < 3; j++) {
+      data.normals.push(normal.x, normal.y, normal.z);
     }
 
     /* ----------------------------------------------------------------------
        Vertices
        ---------------------------------------------------------------------- */
 
-    data.vertices.push(
-      a.clone(),
-      b.clone(),
-      c.clone(),
-    );
+    data.vertices.push(a.clone(), b.clone(), c.clone());
   }
 
   /* ========================================================================
      SECTION-SPECIFIC BOUNDS
      ======================================================================== */
 
-  const sectionBounds: Record<
-    Section,
-    THREE.Box3
-  > = {
+  const sectionBounds: Record<Section, THREE.Box3> = {
     front: new THREE.Box3(),
     back: new THREE.Box3(),
     left: new THREE.Box3(),
@@ -419,67 +315,38 @@ eaveY += 0.01;
     roof: new THREE.Box3(),
   };
 
-  for (
-    const section of SECTION_ORDER
-  ) {
-    const data =
-      sectionData[section];
+  for (const section of SECTION_ORDER) {
+    const data = sectionData[section];
 
-    for (
-      const vertex of data.vertices
-    ) {
-      sectionBounds[
-        section
-      ].expandByPoint(
-        vertex,
-      );
+    for (const vertex of data.vertices) {
+      sectionBounds[section].expandByPoint(vertex);
     }
   }
 
-  console.log(
-    `[3D UV] ${source.name} section bounds`,
-    {
-      front: sectionBounds.front,
-      back: sectionBounds.back,
-      left: sectionBounds.left,
-      right: sectionBounds.right,
-      roof: sectionBounds.roof,
-    },
-  );
+  console.log(`[3D UV] ${source.name} section bounds`, {
+    front: sectionBounds.front,
+    back: sectionBounds.back,
+    left: sectionBounds.left,
+    right: sectionBounds.right,
+    roof: sectionBounds.roof,
+  });
 
   /* ========================================================================
      UV GENERATION
      ======================================================================== */
 
-  const getUV = (
-    vertex: THREE.Vector3,
-    section: Section,
-  ): [number, number] => {
-    const bounds =
-      sectionBounds[section];
+  const getUV = (vertex: THREE.Vector3, section: Section): [number, number] => {
+    const bounds = sectionBounds[section];
 
-    const size =
-      new THREE.Vector3();
+    const size = new THREE.Vector3();
 
     bounds.getSize(size);
 
-    const rangeX =
-      Math.max(
-        size.x,
-        0.0001,
-      );
+    const rangeX = Math.max(size.x, 0.0001);
 
-    const rangeY =
-      Math.max(
-        size.y,
-        0.0001,
-      );
+    const rangeY = Math.max(size.y, 0.0001);
 
-    const rangeZ =
-      Math.max(
-        size.z,
-        0.0001,
-      );
+    const rangeZ = Math.max(size.z, 0.0001);
 
     let u = 0.5;
     let v = 0.5;
@@ -490,15 +357,9 @@ eaveY += 0.01;
          ================================================================ */
 
       case "front":
-        u =
-          (vertex.x -
-            bounds.min.x) /
-          rangeX;
+        u = (vertex.x - bounds.min.x) / rangeX;
 
-        v =
-          (vertex.y -
-            bounds.min.y) /
-          rangeY;
+        v = (vertex.y - bounds.min.y) / rangeY;
 
         break;
 
@@ -507,15 +368,9 @@ eaveY += 0.01;
          ================================================================ */
 
       case "back":
-        u =
-          (bounds.max.x -
-            vertex.x) /
-          rangeX;
+        u = (bounds.max.x - vertex.x) / rangeX;
 
-        v =
-          (vertex.y -
-            bounds.min.y) /
-          rangeY;
+        v = (vertex.y - bounds.min.y) / rangeY;
 
         break;
 
@@ -524,15 +379,9 @@ eaveY += 0.01;
          ================================================================ */
 
       case "left":
-        u =
-          (bounds.max.z -
-            vertex.z) /
-          rangeZ;
+        u = (bounds.max.z - vertex.z) / rangeZ;
 
-        v =
-          (vertex.y -
-            bounds.min.y) /
-          rangeY;
+        v = (vertex.y - bounds.min.y) / rangeY;
 
         break;
 
@@ -541,15 +390,9 @@ eaveY += 0.01;
          ================================================================ */
 
       case "right":
-        u =
-          (vertex.z -
-            bounds.min.z) /
-          rangeZ;
+        u = (vertex.z - bounds.min.z) / rangeZ;
 
-        v =
-          (vertex.y -
-            bounds.min.y) /
-          rangeY;
+        v = (vertex.y - bounds.min.y) / rangeY;
 
         break;
 
@@ -568,44 +411,36 @@ eaveY += 0.01;
          * all the way to the peak.
          */
 
-        const centerX =
-          (bounds.min.x + bounds.max.x) * 0.5;
+        const centerX = (bounds.min.x + bounds.max.x) * 0.5;
 
-        const centerZ =
-          (bounds.min.z + bounds.max.z) * 0.5;
+        const centerZ = (bounds.min.z + bounds.max.z) * 0.5;
 
-        const dx =
-          vertex.x - centerX;
+        const dx = vertex.x - centerX;
 
-        const dz =
-          vertex.z - centerZ;
+        const dz = vertex.z - centerZ;
 
-        const maxDX =
-          Math.max(
-            Math.abs(bounds.max.x - centerX),
-            Math.abs(bounds.min.x - centerX),
-            0.0001,
-          );
+        const maxDX = Math.max(
+          Math.abs(bounds.max.x - centerX),
+          Math.abs(bounds.min.x - centerX),
+          0.0001,
+        );
 
-        const maxDZ =
-          Math.max(
-            Math.abs(bounds.max.z - centerZ),
-            Math.abs(bounds.min.z - centerZ),
-            0.0001,
-          );
+        const maxDZ = Math.max(
+          Math.abs(bounds.max.z - centerZ),
+          Math.abs(bounds.min.z - centerZ),
+          0.0001,
+        );
 
-        const nx =
-          dx / maxDX;
+        const nx = dx / maxDX;
 
-        const nz =
-          dz / maxDZ;
+        const nz = dz / maxDZ;
 
         /*
          * Keep the roof artwork inside the usable
          * center area of the roof texture.
          */
-        u = 0.5 + nx * 0.40;
-        v = 0.5 + nz * 0.40;
+        u = 0.5 + nx * 0.4;
+        v = 0.5 + nz * 0.4;
 
         break;
       }
@@ -621,21 +456,9 @@ eaveY += 0.01;
      */
 
     return [
-      0.01 +
-        THREE.MathUtils.clamp(
-          u,
-          0,
-          1,
-        ) *
-          0.98,
+      0.01 + THREE.MathUtils.clamp(u, 0, 1) * 0.98,
 
-      0.99 -
-        THREE.MathUtils.clamp(
-          v,
-          0,
-          1,
-        ) *
-          0.98,
+      0.99 - THREE.MathUtils.clamp(v, 0, 1) * 0.98,
     ];
   };
 
@@ -643,20 +466,12 @@ eaveY += 0.01;
      CREATE FINAL GEOMETRIES
      ======================================================================== */
 
-  const result =
-    {} as Record<
-      Section,
-      THREE.BufferGeometry
-    >;
+  const result = {} as Record<Section, THREE.BufferGeometry>;
 
-  for (
-    const section of SECTION_ORDER
-  ) {
-    const data =
-      sectionData[section];
+  for (const section of SECTION_ORDER) {
+    const data = sectionData[section];
 
-    const geometry =
-      new THREE.BufferGeometry();
+    const geometry = new THREE.BufferGeometry();
 
     /* ----------------------------------------------------------------------
        Position
@@ -664,10 +479,7 @@ eaveY += 0.01;
 
     geometry.setAttribute(
       "position",
-      new THREE.Float32BufferAttribute(
-        data.positions,
-        3,
-      ),
+      new THREE.Float32BufferAttribute(data.positions, 3),
     );
 
     /* ----------------------------------------------------------------------
@@ -676,10 +488,7 @@ eaveY += 0.01;
 
     geometry.setAttribute(
       "normal",
-      new THREE.Float32BufferAttribute(
-        data.normals,
-        3,
-      ),
+      new THREE.Float32BufferAttribute(data.normals, 3),
     );
 
     /* ----------------------------------------------------------------------
@@ -688,37 +497,19 @@ eaveY += 0.01;
 
     const uvs: number[] = [];
 
-    for (
-      const vertex of data.vertices
-    ) {
-      const [
-        u,
-        v,
-      ] = getUV(
-        vertex,
-        section,
-      );
+    for (const vertex of data.vertices) {
+      const [u, v] = getUV(vertex, section);
 
-      uvs.push(
-        u,
-        v,
-      );
+      uvs.push(u, v);
     }
 
-    geometry.setAttribute(
-      "uv",
-      new THREE.Float32BufferAttribute(
-        uvs,
-        2,
-      ),
-    );
+    geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
 
     geometry.computeBoundingBox();
 
     geometry.computeBoundingSphere();
 
-    result[section] =
-      geometry;
+    result[section] = geometry;
   }
 
   sourceGeometry.dispose();
@@ -846,7 +637,6 @@ async function create3DSectionTexture(sectionConfig: {
 
       try {
         const image = await loadImage(element.image);
-      
 
         imageMap.set(element.id, image);
       } catch (error) {
@@ -1157,8 +947,7 @@ function SceneModel() {
           }
 
           const sectionMeshes = object.userData.sectionMeshes as
-            | Record<Section, THREE.Mesh>
-            | undefined;
+            Record<Section, THREE.Mesh> | undefined;
 
           if (!sectionMeshes) {
             return;

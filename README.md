@@ -54,7 +54,7 @@ Pricing is calculated by the backend.
 Current pricing:
 
 | Tent Size | Base Price | Variant Price |
-|-----------|------------|---------------|
+| --------- | ---------- | ------------- |
 | 5x5       | $699       | $0            |
 | 8x8       | $899       | $100          |
 
@@ -147,3 +147,4 @@ Three.js Assesment/
 │   └── package.json
 │
 └── README.md
+```

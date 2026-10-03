@@ -1,96 +1,43 @@
-import {
-  ImagePlus,
-  Plus,
-  Trash2,
-  RotateCcw,
-} from "lucide-react";
+import { ImagePlus, Plus, Trash2, RotateCcw } from "lucide-react";
 
-import {
-  useRef,
-} from "react";
+import { useRef } from "react";
 
-import {
-  useConfiguratorStore,
-} from "../store/configuratorStore";
+import { useConfiguratorStore } from "../store/configuratorStore";
 
-import type {
-  Section,
-} from "../types/configurator";
+import type { Section } from "../types/configurator";
 
-const sections: Section[] = [
-  "front",
-  "back",
-  "left",
-  "right",
-  "roof",
-];
+const sections: Section[] = ["front", "back", "left", "right", "roof"];
 
 export default function Controls() {
-  const config =
-    useConfiguratorStore(
-      (state) => state.config,
-    );
+  const config = useConfiguratorStore((state) => state.config);
 
-  const activeSection =
-    useConfiguratorStore(
-      (state) => state.activeSection,
-    );
+  const activeSection = useConfiguratorStore((state) => state.activeSection);
 
-  const selectedElementId =
-    useConfiguratorStore(
-      (state) => state.selectedElementId,
-    );
+  const selectedElementId = useConfiguratorStore(
+    (state) => state.selectedElementId,
+  );
 
-  const setSection =
-    useConfiguratorStore(
-      (state) => state.setSection,
-    );
+  const setSection = useConfiguratorStore((state) => state.setSection);
 
-  const setSize =
-    useConfiguratorStore(
-      (state) => state.setSize,
-    );
+  const setSize = useConfiguratorStore((state) => state.setSize);
 
-  const setCanopyColor =
-    useConfiguratorStore(
-      (state) => state.setCanopyColor,
-    );
+  const setCanopyColor = useConfiguratorStore((state) => state.setCanopyColor);
 
-  const setFrameColor =
-    useConfiguratorStore(
-      (state) => state.setFrameColor,
-    );
+  const setFrameColor = useConfiguratorStore((state) => state.setFrameColor);
 
-  const add =
-    useConfiguratorStore(
-      (state) => state.addElement,
-    );
+  const add = useConfiguratorStore((state) => state.addElement);
 
-  const update =
-    useConfiguratorStore(
-      (state) => state.updateElement,
-    );
+  const update = useConfiguratorStore((state) => state.updateElement);
 
-  const remove =
-    useConfiguratorStore(
-      (state) => state.removeElement,
-    );
+  const remove = useConfiguratorStore((state) => state.removeElement);
 
-  const reset =
-    useConfiguratorStore(
-      (state) => state.reset,
-    );
+  const reset = useConfiguratorStore((state) => state.reset);
 
-  const file =
-    useRef<HTMLInputElement | null>(null);
+  const file = useRef<HTMLInputElement | null>(null);
 
-  const selected =
-    config.sections[
-      activeSection
-    ].elements.find(
-      (element) =>
-        element.id === selectedElementId,
-    );
+  const selected = config.sections[activeSection].elements.find(
+    (element) => element.id === selectedElementId,
+  );
 
   /* ---------------------------------------------------------------------- */
   /* ADD TEXT                                                               */
@@ -133,8 +80,7 @@ export default function Controls() {
   /* ---------------------------------------------------------------------- */
 
   const upload = (uploadedFile: File) => {
-    const reader =
-      new FileReader();
+    const reader = new FileReader();
 
     reader.onload = () => {
       add({
@@ -144,9 +90,7 @@ export default function Controls() {
 
         text: "",
 
-        image: String(
-          reader.result,
-        ),
+        image: String(reader.result),
 
         x: 50,
 
@@ -170,9 +114,7 @@ export default function Controls() {
       });
     };
 
-    reader.readAsDataURL(
-      uploadedFile,
-    );
+    reader.readAsDataURL(uploadedFile);
   };
 
   return (
@@ -190,10 +132,7 @@ export default function Controls() {
       {/* ================================================================ */}
 
       <div className="control-group">
-        <label
-          htmlFor="product-size"
-          className="control-label"
-        >
+        <label htmlFor="product-size" className="control-label">
           Product Size
         </label>
 
@@ -201,21 +140,11 @@ export default function Controls() {
           id="product-size"
           className="control-select"
           value={config.size}
-          onChange={(event) =>
-            setSize(
-              event.target.value as
-                | "5x5"
-                | "8x8",
-            )
-          }
+          onChange={(event) => setSize(event.target.value as "5x5" | "8x8")}
         >
-          <option value="5x5">
-            5x5
-          </option>
+          <option value="5x5">5x5</option>
 
-          <option value="8x8">
-            8x8
-          </option>
+          <option value="8x8">8x8</option>
         </select>
       </div>
 
@@ -224,58 +153,36 @@ export default function Controls() {
       {/* ================================================================ */}
 
       <div className="control-group">
-        <span className="control-label">
-          Colors
-        </span>
+        <span className="control-label">Colors</span>
 
         <div className="color-grid">
           <div className="color-control">
-            <label htmlFor="canopy-color">
-              Canopy Color
-            </label>
+            <label htmlFor="canopy-color">Canopy Color</label>
 
             <div className="color-input-wrapper">
               <input
                 id="canopy-color"
                 type="color"
-                value={
-                  config.canopyColor
-                }
-                onChange={(event) =>
-                  setCanopyColor(
-                    event.target.value,
-                  )
-                }
+                value={config.canopyColor}
+                onChange={(event) => setCanopyColor(event.target.value)}
               />
 
-              <span>
-                {config.canopyColor.toUpperCase()}
-              </span>
+              <span>{config.canopyColor.toUpperCase()}</span>
             </div>
           </div>
 
           <div className="color-control">
-            <label htmlFor="frame-color">
-              Frame Color
-            </label>
+            <label htmlFor="frame-color">Frame Color</label>
 
             <div className="color-input-wrapper">
               <input
                 id="frame-color"
                 type="color"
-                value={
-                  config.frameColor
-                }
-                onChange={(event) =>
-                  setFrameColor(
-                    event.target.value,
-                  )
-                }
+                value={config.frameColor}
+                onChange={(event) => setFrameColor(event.target.value)}
               />
 
-              <span>
-                {config.frameColor.toUpperCase()}
-              </span>
+              <span>{config.frameColor.toUpperCase()}</span>
             </div>
           </div>
         </div>
@@ -286,32 +193,21 @@ export default function Controls() {
       {/* ================================================================ */}
 
       <div className="control-group">
-        <span className="control-label">
-          Panel
-        </span>
+        <span className="control-label">Panel</span>
 
         <div className="panel-tabs">
-          {sections.map(
-            (section) => (
-              <button
-                type="button"
-                key={section}
-                className={
-                  section ===
-                  activeSection
-                    ? "panel-tab active"
-                    : "panel-tab"
-                }
-                onClick={() =>
-                  setSection(
-                    section,
-                  )
-                }
-              >
-                {section}
-              </button>
-            ),
-          )}
+          {sections.map((section) => (
+            <button
+              type="button"
+              key={section}
+              className={
+                section === activeSection ? "panel-tab active" : "panel-tab"
+              }
+              onClick={() => setSection(section)}
+            >
+              {section}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -320,33 +216,21 @@ export default function Controls() {
       {/* ================================================================ */}
 
       <div className="control-group">
-        <span className="control-label">
-          Add Design
-        </span>
+        <span className="control-label">Add Design</span>
 
         <div className="action-row">
-          <button
-            type="button"
-            className="primary-action"
-            onClick={addText}
-          >
+          <button type="button" className="primary-action" onClick={addText}>
             <Plus size={17} />
-            <span>
-              Add Text
-            </span>
+            <span>Add Text</span>
           </button>
 
           <button
             type="button"
             className="primary-action"
-            onClick={() =>
-              file.current?.click()
-            }
+            onClick={() => file.current?.click()}
           >
             <ImagePlus size={17} />
-            <span>
-              Logo
-            </span>
+            <span>Logo</span>
           </button>
 
           <input
@@ -355,13 +239,10 @@ export default function Controls() {
             type="file"
             accept="image/*"
             onChange={(event) => {
-              const uploadedFile =
-                event.target.files?.[0];
+              const uploadedFile = event.target.files?.[0];
 
               if (uploadedFile) {
-                upload(
-                  uploadedFile,
-                );
+                upload(uploadedFile);
               }
 
               event.target.value = "";
@@ -377,20 +258,13 @@ export default function Controls() {
       {selected && (
         <div className="selected-element">
           <div className="selected-title">
-            Selected{" "}
-            <strong>
-              {selected.type}
-            </strong>
+            Selected <strong>{selected.type}</strong>
           </div>
 
-          {selected.type ===
-            "text" && (
+          {selected.type === "text" && (
             <>
               <div className="control-group">
-                <label
-                  htmlFor="selected-text"
-                  className="control-label"
-                >
+                <label htmlFor="selected-text" className="control-label">
                   Text
                 </label>
 
@@ -398,27 +272,17 @@ export default function Controls() {
                   id="selected-text"
                   className="control-input"
                   type="text"
-                  value={
-                    selected.text
-                  }
+                  value={selected.text}
                   onChange={(event) =>
-                    update(
-                      selected.id,
-                      {
-                        text:
-                          event.target
-                            .value,
-                      },
-                    )
+                    update(selected.id, {
+                      text: event.target.value,
+                    })
                   }
                 />
               </div>
 
               <div className="control-group">
-                <label
-                  htmlFor="selected-text-color"
-                  className="control-label"
-                >
+                <label htmlFor="selected-text-color" className="control-label">
                   Text Color
                 </label>
 
@@ -426,18 +290,11 @@ export default function Controls() {
                   id="selected-text-color"
                   className="small-color-input"
                   type="color"
-                  value={
-                    selected.color
-                  }
+                  value={selected.color}
                   onChange={(event) =>
-                    update(
-                      selected.id,
-                      {
-                        color:
-                          event.target
-                            .value,
-                      },
-                    )
+                    update(selected.id, {
+                      color: event.target.value,
+                    })
                   }
                 />
               </div>
@@ -446,15 +303,9 @@ export default function Controls() {
 
           <div className="slider-group">
             <div className="slider-header">
-              <span>
-                Scale
-              </span>
+              <span>Scale</span>
 
-              <span>
-                {selected.scale.toFixed(
-                  2,
-                )}
-              </span>
+              <span>{selected.scale.toFixed(2)}</span>
             </div>
 
             <input
@@ -462,56 +313,31 @@ export default function Controls() {
               min="0.2"
               max="2"
               step="0.05"
-              value={
-                selected.scale
-              }
+              value={selected.scale}
               onChange={(event) =>
-                update(
-                  selected.id,
-                  {
-                    scale:
-                      Number(
-                        event.target
-                          .value,
-                      ),
-                  },
-                )
+                update(selected.id, {
+                  scale: Number(event.target.value),
+                })
               }
             />
           </div>
 
           <div className="slider-group">
             <div className="slider-header">
-              <span>
-                Rotation
-              </span>
+              <span>Rotation</span>
 
-              <span>
-                {Math.round(
-                  selected.rotation,
-                )}
-                °
-              </span>
+              <span>{Math.round(selected.rotation)}°</span>
             </div>
 
             <input
               type="range"
               min="-180"
               max="180"
-              value={
-                selected.rotation
-              }
+              value={selected.rotation}
               onChange={(event) =>
-                update(
-                  selected.id,
-                  {
-                    rotation:
-                      Number(
-                        event.target
-                          .value,
-                      ),
-                  },
-                )
+                update(selected.id, {
+                  rotation: Number(event.target.value),
+                })
               }
             />
           </div>
@@ -519,11 +345,7 @@ export default function Controls() {
           <button
             type="button"
             className="danger-action"
-            onClick={() =>
-              remove(
-                selected.id,
-              )
-            }
+            onClick={() => remove(selected.id)}
           >
             <Trash2 size={16} />
             Remove
@@ -535,11 +357,7 @@ export default function Controls() {
       {/* RESET                                                            */}
       {/* ================================================================ */}
 
-      <button
-        type="button"
-        className="reset-action"
-        onClick={reset}
-      >
+      <button type="button" className="reset-action" onClick={reset}>
         <RotateCcw size={16} />
         Reset
       </button>

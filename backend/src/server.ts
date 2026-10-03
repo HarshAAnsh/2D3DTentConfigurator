@@ -95,10 +95,7 @@ app.post("/api/pricing", (req, res) => {
        Final price
        ---------------------------------------------------------------------- */
 
-    const total =
-      basePrice +
-      variantPrice +
-      customizationPrice;
+    const total = basePrice + variantPrice + customizationPrice;
 
     const response = {
       basePrice,
@@ -108,7 +105,6 @@ app.post("/api/pricing", (req, res) => {
       currency: "USD",
       customizationCount,
     };
-
 
     return res.json(response);
   } catch (error) {
@@ -135,12 +131,7 @@ app.post("/api/shopify/cart", (req, res) => {
       });
     }
 
-    const cartId =
-      "mock-cart-" +
-      Math.random()
-        .toString(36)
-        .slice(2, 10);
-
+    const cartId = "mock-cart-" + Math.random().toString(36).slice(2, 10);
 
     return res.json({
       success: true,
@@ -178,7 +169,5 @@ app.get("/api/health", (_req, res) => {
 const port = Number(process.env.PORT) || 5000;
 
 app.listen(port, () => {
-  console.log(
-    `API running on http://localhost:${port}`,
-  );
+  console.log(`API running on http://localhost:${port}`);
 });

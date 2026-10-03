@@ -11,69 +11,59 @@ import type {
 /* CREATE EMPTY SECTIONS                                                      */
 /* -------------------------------------------------------------------------- */
 
-const createEmptySections =
-  (
-    color: string,
-  ): ProductConfiguration["sections"] => ({
-    front: {
-      color,
+const createEmptySections = (
+  color: string,
+): ProductConfiguration["sections"] => ({
+  front: {
+    color,
 
-      elements: [],
-    },
+    elements: [],
+  },
 
-    back: {
-      color,
+  back: {
+    color,
 
-      elements: [],
-    },
+    elements: [],
+  },
 
-    left: {
-      color,
+  left: {
+    color,
 
-      elements: [],
-    },
+    elements: [],
+  },
 
-    right: {
-      color,
+  right: {
+    color,
 
-      elements: [],
-    },
+    elements: [],
+  },
 
-    roof: {
-      color,
+  roof: {
+    color,
 
-      elements: [],
-    },
-  });
+    elements: [],
+  },
+});
 
 /* -------------------------------------------------------------------------- */
 /* CREATE INITIAL CONFIGURATION                                               */
 /* -------------------------------------------------------------------------- */
 
-const createInitialConfig =
-  (): ProductConfiguration => {
-    const canopyColor =
-      "#ffffff";
+const createInitialConfig = (): ProductConfiguration => {
+  const canopyColor = "#ffffff";
 
-    return {
-      id:
-        `CFG-${Date.now()}-${Math.random()
-          .toString(36)
-          .slice(2, 8)}`,
+  return {
+    id: `CFG-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
 
-      size: "8x8",
+    size: "8x8",
 
-      canopyColor,
+    canopyColor,
 
-      frameColor:
-        "#d4d4d4",
+    frameColor: "#d4d4d4",
 
-      sections:
-        createEmptySections(
-          canopyColor,
-        ),
-    };
+    sections: createEmptySections(canopyColor),
   };
+};
 
 /* -------------------------------------------------------------------------- */
 /* STATE                                                                      */
@@ -84,42 +74,23 @@ interface State {
 
   activeSection: Section;
 
-  selectedElementId:
-    | string
-    | null;
+  selectedElementId: string | null;
 
-  setSize: (
-    size: TentSize,
-  ) => void;
+  setSize: (size: TentSize) => void;
 
-  setCanopyColor: (
-    color: string,
-  ) => void;
+  setCanopyColor: (color: string) => void;
 
-  setFrameColor: (
-    color: string,
-  ) => void;
+  setFrameColor: (color: string) => void;
 
-  setSection: (
-    section: Section,
-  ) => void;
+  setSection: (section: Section) => void;
 
-  addElement: (
-    element: DesignElement,
-  ) => void;
+  addElement: (element: DesignElement) => void;
 
-  updateElement: (
-    id: string,
-    patch: Partial<DesignElement>,
-  ) => void;
+  updateElement: (id: string, patch: Partial<DesignElement>) => void;
 
-  removeElement: (
-    id: string,
-  ) => void;
+  removeElement: (id: string) => void;
 
-  selectElement: (
-    id: string | null,
-  ) => void;
+  selectElement: (id: string | null) => void;
 
   reset: () => void;
 }
@@ -128,262 +99,201 @@ interface State {
 /* STORE                                                                      */
 /* -------------------------------------------------------------------------- */
 
-export const useConfiguratorStore =
-  create<State>((set) => ({
-    config:
-      createInitialConfig(),
+export const useConfiguratorStore = create<State>((set) => ({
+  config: createInitialConfig(),
 
-    activeSection:
-      "front",
+  activeSection: "front",
 
-    selectedElementId:
-      null,
+  selectedElementId: null,
 
-    /* -------------------------------------------------------------------- */
-    /* SIZE                                                                 */
-    /* -------------------------------------------------------------------- */
+  /* -------------------------------------------------------------------- */
+  /* SIZE                                                                 */
+  /* -------------------------------------------------------------------- */
 
-    setSize: (
-      size,
-    ) =>
-      set((state) => ({
-        config: {
-          ...state.config,
+  setSize: (size) =>
+    set((state) => ({
+      config: {
+        ...state.config,
 
-          size,
-        },
-      })),
+        size,
+      },
+    })),
 
-    /* -------------------------------------------------------------------- */
-    /* CANOPY COLOR                                                         */
-    /* -------------------------------------------------------------------- */
+  /* -------------------------------------------------------------------- */
+  /* CANOPY COLOR                                                         */
+  /* -------------------------------------------------------------------- */
 
-    setCanopyColor: (
-      canopyColor,
-    ) =>
-      set((state) => ({
-        config: {
-          ...state.config,
+  setCanopyColor: (canopyColor) =>
+    set((state) => ({
+      config: {
+        ...state.config,
 
-          canopyColor,
+        canopyColor,
 
-          /*
-           * Keep every panel's
-           * background synchronized
-           * with the main canopy color.
-           */
-          sections: {
-            front: {
-              ...state.config.sections
-                .front,
+        /*
+         * Keep every panel's
+         * background synchronized
+         * with the main canopy color.
+         */
+        sections: {
+          front: {
+            ...state.config.sections.front,
 
-              color:
-                canopyColor,
-            },
+            color: canopyColor,
+          },
 
-            back: {
-              ...state.config.sections
-                .back,
+          back: {
+            ...state.config.sections.back,
 
-              color:
-                canopyColor,
-            },
+            color: canopyColor,
+          },
 
-            left: {
-              ...state.config.sections
-                .left,
+          left: {
+            ...state.config.sections.left,
 
-              color:
-                canopyColor,
-            },
+            color: canopyColor,
+          },
 
-            right: {
-              ...state.config.sections
-                .right,
+          right: {
+            ...state.config.sections.right,
 
-              color:
-                canopyColor,
-            },
+            color: canopyColor,
+          },
 
-            roof: {
-              ...state.config.sections
-                .roof,
+          roof: {
+            ...state.config.sections.roof,
 
-              color:
-                canopyColor,
-            },
+            color: canopyColor,
           },
         },
-      })),
+      },
+    })),
 
-    /* -------------------------------------------------------------------- */
-    /* FRAME COLOR                                                          */
-    /* -------------------------------------------------------------------- */
+  /* -------------------------------------------------------------------- */
+  /* FRAME COLOR                                                          */
+  /* -------------------------------------------------------------------- */
 
-    setFrameColor: (
-      frameColor,
-    ) =>
-      set((state) => ({
-        config: {
-          ...state.config,
+  setFrameColor: (frameColor) =>
+    set((state) => ({
+      config: {
+        ...state.config,
 
-          frameColor,
-        },
-      })),
+        frameColor,
+      },
+    })),
 
-    /* -------------------------------------------------------------------- */
-    /* ACTIVE PANEL                                                         */
-    /* -------------------------------------------------------------------- */
+  /* -------------------------------------------------------------------- */
+  /* ACTIVE PANEL                                                         */
+  /* -------------------------------------------------------------------- */
 
-    setSection: (
+  setSection: (activeSection) =>
+    set({
       activeSection,
-    ) =>
-      set({
-        activeSection,
 
-        selectedElementId:
-          null,
-      }),
+      selectedElementId: null,
+    }),
 
-    /* -------------------------------------------------------------------- */
-    /* ADD ELEMENT                                                          */
-    /* -------------------------------------------------------------------- */
+  /* -------------------------------------------------------------------- */
+  /* ADD ELEMENT                                                          */
+  /* -------------------------------------------------------------------- */
 
-    addElement: (
-      element,
-    ) =>
-      set((state) => ({
-        config: {
-          ...state.config,
+  addElement: (element) =>
+    set((state) => ({
+      config: {
+        ...state.config,
 
-          sections: {
-            ...state.config
-              .sections,
+        sections: {
+          ...state.config.sections,
 
-            [state.activeSection]: {
-              ...state.config
-                .sections[
-                state.activeSection
-              ],
+          [state.activeSection]: {
+            ...state.config.sections[state.activeSection],
 
-              elements: [
-                ...state.config
-                  .sections[
-                  state.activeSection
-                ].elements,
+            elements: [
+              ...state.config.sections[state.activeSection].elements,
 
-                element,
-              ],
-            },
+              element,
+            ],
           },
         },
+      },
 
-        selectedElementId:
-          element.id,
-      })),
+      selectedElementId: element.id,
+    })),
 
-    /* -------------------------------------------------------------------- */
-    /* UPDATE ELEMENT                                                       */
-    /* -------------------------------------------------------------------- */
+  /* -------------------------------------------------------------------- */
+  /* UPDATE ELEMENT                                                       */
+  /* -------------------------------------------------------------------- */
 
-    updateElement: (
-      id,
-      patch,
-    ) =>
-      set((state) => ({
-        config: {
-          ...state.config,
+  updateElement: (id, patch) =>
+    set((state) => ({
+      config: {
+        ...state.config,
 
-          sections: {
-            ...state.config
-              .sections,
+        sections: {
+          ...state.config.sections,
 
-            [state.activeSection]: {
-              ...state.config
-                .sections[
-                state.activeSection
-              ],
+          [state.activeSection]: {
+            ...state.config.sections[state.activeSection],
 
-              elements:
-                state.config
-                  .sections[
-                  state.activeSection
-                ].elements.map(
-                  (element) =>
-                    element.id === id
-                      ? {
-                          ...element,
+            elements: state.config.sections[state.activeSection].elements.map(
+              (element) =>
+                element.id === id
+                  ? {
+                      ...element,
 
-                          ...patch,
-                        }
-                      : element,
-                ),
-            },
+                      ...patch,
+                    }
+                  : element,
+            ),
           },
         },
-      })),
+      },
+    })),
 
-    /* -------------------------------------------------------------------- */
-    /* REMOVE ELEMENT                                                       */
-    /* -------------------------------------------------------------------- */
+  /* -------------------------------------------------------------------- */
+  /* REMOVE ELEMENT                                                       */
+  /* -------------------------------------------------------------------- */
 
-    removeElement: (
-      id,
-    ) =>
-      set((state) => ({
-        config: {
-          ...state.config,
+  removeElement: (id) =>
+    set((state) => ({
+      config: {
+        ...state.config,
 
-          sections: {
-            ...state.config
-              .sections,
+        sections: {
+          ...state.config.sections,
 
-            [state.activeSection]: {
-              ...state.config
-                .sections[
-                state.activeSection
-              ],
+          [state.activeSection]: {
+            ...state.config.sections[state.activeSection],
 
-              elements:
-                state.config
-                  .sections[
-                  state.activeSection
-                ].elements.filter(
-                  (element) =>
-                    element.id !== id,
-                ),
-            },
+            elements: state.config.sections[
+              state.activeSection
+            ].elements.filter((element) => element.id !== id),
           },
         },
+      },
 
-        selectedElementId:
-          null,
-      })),
+      selectedElementId: null,
+    })),
 
-    /* -------------------------------------------------------------------- */
-    /* SELECT ELEMENT                                                       */
-    /* -------------------------------------------------------------------- */
+  /* -------------------------------------------------------------------- */
+  /* SELECT ELEMENT                                                       */
+  /* -------------------------------------------------------------------- */
 
-    selectElement: (
+  selectElement: (selectedElementId) =>
+    set({
       selectedElementId,
-    ) =>
-      set({
-        selectedElementId,
-      }),
+    }),
 
-    /* -------------------------------------------------------------------- */
-    /* RESET                                                                */
-    /* -------------------------------------------------------------------- */
+  /* -------------------------------------------------------------------- */
+  /* RESET                                                                */
+  /* -------------------------------------------------------------------- */
 
-    reset: () =>
-      set({
-        config:
-          createInitialConfig(),
+  reset: () =>
+    set({
+      config: createInitialConfig(),
 
-        activeSection:
-          "front",
+      activeSection: "front",
 
-        selectedElementId:
-          null,
-      }),
-  }));
+      selectedElementId: null,
+    }),
+}));

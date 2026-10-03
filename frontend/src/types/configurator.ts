@@ -1,17 +1,8 @@
-export type TentSize =
-  | "5x5"
-  | "8x8";
+export type TentSize = "5x5" | "8x8";
 
-export type Section =
-  | "front"
-  | "back"
-  | "left"
-  | "right"
-  | "roof";
+export type Section = "front" | "back" | "left" | "right" | "roof";
 
-export type ElementType =
-  | "text"
-  | "image";
+export type ElementType = "text" | "image";
 
 /* -------------------------------------------------------------------------- */
 /* DESIGN ELEMENT                                                             */
@@ -104,10 +95,7 @@ export interface ProductConfiguration {
   /*
    * Individual panel configurations.
    */
-  sections: Record<
-    Section,
-    SectionDesign
-  >;
+  sections: Record<Section, SectionDesign>;
 }
 
 /* -------------------------------------------------------------------------- */
