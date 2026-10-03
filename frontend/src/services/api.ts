@@ -5,52 +5,37 @@ import type {
   ProductConfiguration,
 } from "../types/configurator";
 
-/* -------------------------------------------------------------------------- */
-/* AXIOS CLIENT                                                               */
-/* -------------------------------------------------------------------------- */
+const API_URL = "http://localhost:5000";
 
-const client =
-  axios.create({
-    baseURL:
-      import.meta.env
-        .VITE_API_URL ||
-      "",
-  });
-
-/* -------------------------------------------------------------------------- */
-/* GET PRICE                                                                  */
-/* -------------------------------------------------------------------------- */
+const client = axios.create({
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 export async function getPrice(
   config: ProductConfiguration,
 ): Promise<PriceResponse> {
-  const response =
-    await client.post<PriceResponse>(
-      "/api/pricing",
-      config,
-    );
+  const response = await client.post<PriceResponse>(
+    "/api/pricing",
+    config,
+  );
 
   return response.data;
 }
-
-/* -------------------------------------------------------------------------- */
-/* SHOPIFY CART                                                               */
-/* -------------------------------------------------------------------------- */
 
 export async function addToShopify(
   config: ProductConfiguration,
   price: PriceResponse,
 ) {
-  const response =
-    await client.post(
-      "/api/shopify/cart",
-      {
-        configuration:
-          config,
-
-        price,
-      },
-    );
+  const response = await client.post(
+    "/api/shopify/cart",
+    {
+      configuration: config,
+      price,
+    },
+  );
 
   return response.data;
 }

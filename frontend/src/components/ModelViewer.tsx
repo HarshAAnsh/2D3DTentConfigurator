@@ -302,16 +302,7 @@ if (
  */
 eaveY += 0.01;
 
-console.log(
-  `[3D GEOMETRY] ${source.name} eave detection`,
-  {
-    maxRadius,
-    perimeterThreshold,
-    eaveY,
-    perimeterSamples:
-      perimeterYValues.length,
-  },
-);
+
 
 
   /* ========================================================================
@@ -567,50 +558,57 @@ console.log(
          ================================================================ */
 
       case "roof": {
-  /*
-   * The roof is a pyramid/four-sided canopy.
-   *
-   * Use the X/Z position relative to the tent center.
-   * Instead of using the roof bounding box directly,
-   * compress the coordinates toward the center.
-   */
+        /*
+         * The roof is a pyramid-like surface.
+         *
+         * A direct X/Z projection maps the center of the
+         * 2D texture toward the roof apex. Instead, use a
+         * centered, reduced projection so the logo/design
+         * stays on the roof surface and does not get pulled
+         * all the way to the peak.
+         */
 
-  const centerX =
-    (bounds.min.x +
-      bounds.max.x) *
-    0.5;
+        const centerX =
+          (bounds.min.x + bounds.max.x) * 0.5;
 
-  const centerZ =
-    (bounds.min.z +
-      bounds.max.z) *
-    0.5;
+        const centerZ =
+          (bounds.min.z + bounds.max.z) * 0.5;
 
-  const halfX =
-    Math.max(
-      Math.abs(bounds.max.x - centerX),
-      0.0001,
-    );
+        const dx =
+          vertex.x - centerX;
 
-  const halfZ =
-    Math.max(
-      Math.abs(bounds.max.z - centerZ),
-      0.0001,
-    );
+        const dz =
+          vertex.z - centerZ;
 
-  u =
-    0.5 +
-    ((vertex.x - centerX) /
-      halfX) *
-      0.45;
+        const maxDX =
+          Math.max(
+            Math.abs(bounds.max.x - centerX),
+            Math.abs(bounds.min.x - centerX),
+            0.0001,
+          );
 
-  v =
-    0.5 +
-    ((vertex.z - centerZ) /
-      halfZ) *
-      0.45;
+        const maxDZ =
+          Math.max(
+            Math.abs(bounds.max.z - centerZ),
+            Math.abs(bounds.min.z - centerZ),
+            0.0001,
+          );
 
-  break;
-}
+        const nx =
+          dx / maxDX;
+
+        const nz =
+          dz / maxDZ;
+
+        /*
+         * Keep the roof artwork inside the usable
+         * center area of the roof texture.
+         */
+        u = 0.5 + nx * 0.40;
+        v = 0.5 + nz * 0.40;
+
+        break;
+      }
     }
 
     /*
@@ -848,12 +846,7 @@ async function create3DSectionTexture(sectionConfig: {
 
       try {
         const image = await loadImage(element.image);
-        console.log("[3D LOGO] loaded", {
-          id: element.id,
-          width: image.naturalWidth,
-          height: image.naturalHeight,
-          srcLength: element.image.length,
-        });
+      
 
         imageMap.set(element.id, image);
       } catch (error) {
