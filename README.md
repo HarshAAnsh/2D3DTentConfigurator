@@ -1,116 +1,149 @@
 # 3D Tent Configurator
 
-A responsive 3D tent product configurator built with:
+A web-based 3D tent configurator built with React, TypeScript, Three.js and React Three Fiber.
 
-- React
-- TypeScript
-- Vite
-- Three.js
-- React Three Fiber
-- Zustand
-- Node.js
-- Express
-- React PDF
+The application allows users to select a tent size, customize colors, edit individual tent panels in 2D, add text and logos, transform design elements, preview the result in 3D, calculate dynamic pricing, generate a configuration PDF and send the configuration to a mock Shopify cart endpoint.
+
+---
 
 ## Features
 
-### 3D
+### Product Configuration
 
-- GLB tent models
-- 5x5
-- 6.5x6.5
-- 8x8
-- Orbit controls
-- Zoom
-- Responsive viewer
-- Dynamic frame color
-- Dynamic panel textures
+- 5x5 tent configuration
+- 8x8 tent configuration
+- Dynamic 3D model switching
+- Canopy color customization
+- Frame color customization
 
-### 2D Editor
+### 2D Panel Editor
+
+Supports independent editing for:
 
 - Front panel
 - Back panel
 - Left panel
 - Right panel
 - Roof panel
+
+Design elements:
+
 - Add text
-- Upload logo
-- Drag elements
-- Scale
-- Rotation
-- Position
-- Text color
-- Font family
-- Font size
-- Opacity
-- Duplicate
-- Delete
-- Clear panel
+- Upload logo/image
+- Move elements
+- Scale elements
+- Rotate elements
+- Remove elements
+- Reset panel configuration
+
+Each panel maintains its own design state.
+
+### 3D Preview
+
+- Real-time 3D tent preview
+- Interactive orbit controls
+- Zoom support
+- Color synchronization
+- 2D design synchronization with the 3D model
+- Logo and text visualization on configured panels
 
 ### Pricing
 
-Pricing is calculated by the backend API.
+Pricing is calculated by the backend.
 
-Base:
+Current pricing:
 
-- $699
+| Tent Size | Base Price | Variant Price |
+|-----------|------------|---------------|
+| 5x5       | $699       | $0            |
+| 8x8       | $899       | $100          |
 
-Variants:
+Customization pricing:
 
-- 5x5: $699
-- 6.5x6.5: $799
-- 8x8: $899
+- $25 per configured design element
 
-Customization:
+The final price is calculated as:
 
-- Text: $25
-- Image: $50
+`Base Price + Variant Price + Customization Price`
 
-### PDF
+### PDF Export
 
-The application generates a configuration PDF containing:
+Users can download a PDF containing the current configuration and pricing information.
 
-- Configuration ID
-- Product
-- Size
-- Panel colors
-- Custom elements
-- Price breakdown
-- 2D preview
+### Cart Integration
 
-### Shopify
+The application sends the complete configuration and calculated price to a mock Shopify cart API.
 
-The project contains a mock Shopify cart API.
+The current implementation intentionally uses a mock cart endpoint for demonstration/assessment purposes.
 
-The payload is structured so that it can be connected to the Shopify Storefront API by providing:
+---
 
-- Store domain
-- Storefront API token
-- Product variant IDs
+## Tech Stack
+
+### Frontend
+
+- React
+- TypeScript
+- Vite
+- Three.js
+- React Three Fiber
+- React Three Drei
+- Zustand
+- Axios
+- Lucide React
+- @react-pdf/renderer
+
+### Backend
+
+- Node.js
+- Express
+- TypeScript
+- CORS
+
+---
 
 ## Project Structure
 
 ```text
-THREE.JS ASSESSMENT
+Three.js Assesment/
 │
-├── backend
-│   ├── src
+├── backend/
+│   ├── src/
 │   │   └── server.ts
+│   ├── dist/
 │   ├── package.json
 │   └── tsconfig.json
 │
-└── frontend
-    ├── public
-    │   └── models
-    │       └── glb
-    │
-    └── src
-        ├── components
-        ├── pdf
-        ├── services
-        ├── store
-        ├── types
-        ├── App.tsx
-        ├── configurator.css
-        ├── index.css
-        └── main.tsx
+├── frontend/
+│   ├── public/
+│   │   └── models/
+│   │       └── glb/
+│   │           ├── Tent_5_5.glb
+│   │           └── Tent_8_8.glb
+│   │
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Controls.tsx
+│   │   │   ├── Editor2D.tsx
+│   │   │   └── ModelViewer.tsx
+│   │   │
+│   │   ├── pdf/
+│   │   │   └── ConfigurationPDF.tsx
+│   │   │
+│   │   ├── services/
+│   │   │   ├── api.ts
+│   │   │   └── textureService.ts
+│   │   │
+│   │   ├── store/
+│   │   │   └── configuratorStore.ts
+│   │   │
+│   │   ├── types/
+│   │   │   └── configurator.ts
+│   │   │
+│   │   ├── App.tsx
+│   │   ├── configurator.css
+│   │   └── index.css
+│   │
+│   └── package.json
+│
+└── README.md
